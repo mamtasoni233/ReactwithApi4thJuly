@@ -1,13 +1,18 @@
+import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
-import './index.css';
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
-import Dashboard from './Pages/Dashboard';
-import Error404 from './Pages/Error404';
-import Login from './Components/Login';
+import Footer from './Components/Footer';
 import Navbar from './Components/Navbar';
-import Register from './Components/Register';
-import Footer from './Pages/Footer';
 
+import { Outlet, Route, BrowserRouter, Routes } from 'react-router-dom';
+import Register from './Components/Register';
+import Login from './Components/Login';
+import Error404 from './Pages/Error404';
+import Dashboard from './Pages/Dashboard';
+import About from './Pages/About';
+import Service from './Pages/Service';
+import Visit from './Pages/Visit';
+import Gallery from './Pages/Gallery';
+import { ToastContainer } from 'react-toastify';
 // A wrapper component to include Navbar and Footer for every route
 const MainLayout = () => (
   <>
@@ -28,21 +33,26 @@ function App() {
   return (
     <>
       <BrowserRouter>
+        <ToastContainer />
         <Routes>
           {/* Auth Layout Routes */}
-          <Route path="/" element={<AuthLayout />}>
+          <Route element={<AuthLayout />}>
+            <Route path="/" element={<Login />} />
             <Route
               path="/register"
               element={<Register />}
               activeclassname="active"
             />
-            <Route path="/login" element={<Login />} />
             <Route path="*" element={<Error404 />} />
           </Route>
 
           {/* Main Layout Routes */}
           <Route element={<MainLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/service" element={<Service />} />
+            <Route path="/visit-us" element={<Visit />} />
+            <Route path="/gallery" element={<Gallery />} />
           </Route>
         </Routes>
       </BrowserRouter>

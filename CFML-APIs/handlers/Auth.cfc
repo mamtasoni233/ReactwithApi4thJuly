@@ -23,16 +23,14 @@ component extends="coldbox.system.RestHandler" {
 		rc['invalid'] = !userService.isValidCredentials( rc.email, rc.password );
 		// This can throw a InvalidCredentials exception which is picked up by the REST handler
 		var token = jwtAuth().attempt( rc.email, rc.password );
-		// writeDump(token);
 		var userDetail = userService.retrieveUserDetailsById( rc.email );	
-		// writeDump(userDetail);abort;
 		var oUser = {
 			'name' = userDetail.firstName,
 			'surname' = userDetail.lastName,
 			'email' = userDetail.email,
-			'avatar' = '', // isDefined('userAvtarBin') ? "data:image/jpeg;base64,#toBase64(userAvtarBin)#" : '',
+			'avatar' = '', 
 			'api_token' = token,
-			'userId' = userDetail.id,
+			'userId' = userDetail.id
 		}
 		
 		// rc['user'] = oUser;
@@ -42,7 +40,7 @@ component extends="coldbox.system.RestHandler" {
 		};
 		event
 			.getResponse()
-			.setData( token )
+			.setData( response )
 			.addMessage(
 				"Bearer token created and it expires in #jwtAuth().getSettings().jwt.expiration# minutes"
 			);
