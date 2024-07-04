@@ -1,0 +1,15 @@
+{
+    "app":{
+        "cfengine":"adobe@2021"
+    },
+    "name":"CFMLApi",
+    "web":{
+        "rewrites":{
+            "enable":true
+        },
+        "http":{
+            "port":"59236"
+        },
+        "host":"0.0.0.0"
+    }
+}
