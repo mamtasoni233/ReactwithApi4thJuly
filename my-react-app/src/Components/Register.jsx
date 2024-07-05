@@ -14,30 +14,40 @@ export default function Register() {
         lastName: ''
     });
     const [error, setError] = useState({
-        username: '',
+        email: '',
         password: '',
         confirmPassword: '',
         firstName: '',
-        lastName: ''
+        lastName: '',
     });
     const onInputChange = (e) => {
-        /* const { name, value } = e.target;
+        const { name, value } = e.target;
         setInput((prev) => ({
             ...prev,
             [name]: value,
-        })); */
-        let oldData = { ...input };
-        let inputName = e.target.name;
-        let inputValue = e.target.value;
-        oldData[inputName] = inputValue;
-        setInput(oldData);
-        validateInput(e);
+        }));
+        // let oldData = { ...input };
+        // let inputName = e.target.name;
+        // let inputValue = e.target.value;
+        // oldData[inputName] = inputValue;
+        // setInput(oldData);
+        // const { name, value } = e.target;
+        // setInput({
+        //     ...input,
+        //     [name]: value
+        // });
+        // if (error[name]) {
+        //     setError({
+        //         ...error,
+        //         [name]: ''
+        //     });
+        // }
+        // validateInput(e);
     };
     const validateInput = (e) => {
         let { name, value } = e.target;
         setError((prev) => {
             const stateObj = { ...prev, [name]: '' };
-
             switch (name) {
                 case 'email':
                     if (!value) {
@@ -87,9 +97,28 @@ export default function Register() {
     };
     const handleRegister = (e) => {
         e.preventDefault();
-        validateInput();
+        // const errors = {};
+        /* let errors = {};
+        let hasErrors = false;
+
+        for (const key in input) {
+            console.log(input)
+            if (input[key].trim() === '') {
+                errors = {
+                    ...errors,
+                    [key]: 'This field is required.'
+                };
+                hasErrors = true;
+            }
+        }
+
+        if (hasErrors) {
+            setError(errors);
+        } else {
+            console.log("Form submitted:", input);
+        } */
         let payload = {
-            email: input.email,
+            username: input.email,
             password: input.password,
             firstName: input.firstName,
             lastName: input.lastName
@@ -97,17 +126,16 @@ export default function Register() {
         try {
             axios.post('http://192.168.3.190:59236/Auth/register', payload)
                 .then((r) => {
-                    console.log(r.data.data);
+                    console.log("r", r);
                     // localStorage.setItem('token', r.data.data.api_token);
                     // localStorage.setItem('user', JSON.stringify(r.data.data.oUser));
                     // // toast.success('Welcome ' + r.data.data.oUser.name + ' ' + r.data.data.oUser.surname);
-                    // if (email !== r.data.data.oUser.email) {
-                    //     toast.error('Invalid credentials');
-                    // } else {
-                    //     toast.success('Welcome ' + r.data.data.oUser.name + ' ' + r.data.data.oUser.surname);
-                    //     navigate("/dashboard");
-                    // }
-                    navigate("/");
+                    if (r.data.length !== "") {
+                        toast.success('You are succefully Registered');
+                        navigate("/");
+                    } else {
+                        toast.error('Invalid credentials');
+                    }
 
                 })
                 .catch((e) => {
@@ -136,7 +164,7 @@ export default function Register() {
                                     onChange={onInputChange}
                                     onBlur={validateInput} />
                                 {error.firstName && (
-                                    <span className="err">{error.firstName}</span>
+                                    <span className="text-red-600">{error.firstName}</span>
                                 )}
                             </div>
                             <div className="mb-4">
@@ -150,7 +178,7 @@ export default function Register() {
                                     onChange={onInputChange}
                                     onBlur={validateInput} />
                                 {error.lastName && (
-                                    <span className="err">{error.lastName}</span>
+                                    <span className="text-red-600">{error.lastName}</span>
                                 )}
                             </div>
                             <div className="mb-4">
@@ -164,7 +192,7 @@ export default function Register() {
                                     onChange={onInputChange}
                                     onBlur={validateInput} />
                                 {error.email && (
-                                    <span className="err">{error.email}</span>
+                                    <span className="text-red-600">{error.email}</span>
                                 )}
                             </div>
                             <div className="mb-4">
@@ -178,7 +206,7 @@ export default function Register() {
                                     onChange={onInputChange}
                                     onBlur={validateInput} />
                                 {error.password && (
-                                    <span className="err">{error.password}</span>
+                                    <span className="text-red-600">{error.password}</span>
                                 )}
                             </div>
                             <div className="mb-4">
@@ -194,11 +222,13 @@ export default function Register() {
                                     onChange={onInputChange}
                                     onBlur={validateInput} />
                                 {error.confirmPassword && (
-                                    <span className="err">{error.confirmPassword}</span>
+                                    <span className="text-red-600">{error.confirmPassword}</span>
                                 )}
-                                <Link className="text-blue-400 hover:text-blue-700">Forgot your password?</Link>
+                                <div className='flex justify-end'>
+                                    <Link className="text-blue-400 hover:text-blue-700">Forgot your password?</Link>
+                                </div>
                             </div>
-                            <div className="mb-6">
+                            <div className="mb-6 text-center">
                                 <button
                                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                     type="submit">

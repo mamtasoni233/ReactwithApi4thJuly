@@ -17,7 +17,7 @@ component extends="coldbox.system.RestHandler" {
 	function login( event, rc, prc ){
 		// writeDump(rc);abort;     
 		
-		param rc.username = "";
+		param rc.email = "";
 		param rc.password = "";
 
 		rc['invalid'] = !userService.isValidCredentials( rc.email, rc.password );
@@ -55,24 +55,34 @@ component extends="coldbox.system.RestHandler" {
 	 * @response    -400     ~auth/register/responses.json##400
 	 */
 	function register( event, rc, prc ){
+		// writeDump(rc);abort;
 		param rc.firstName = "";
 		param rc.lastName  = "";
 		param rc.username  = "";
 		param rc.password  = "";
-
-		// Populate, Validate, Create a new user
-		prc.oUser = userService.create( populateModel( "User" ).validateOrFail() );
-
+		// prc.oUser = userService.create( populateModel( "User" ).validateOrFail() );
+		prc.oUser = userService.create(rc);
+		// writeDump(prc.oUser);abort;
 		// Log them in if it was created!
+		// var token = jwtAuth().fromuser( prc.oUser );
+		var response = {
+			"oUser": prc.oUser
+		};
 		event
 			.getResponse()
-			.setData( {
-				"token" : jwtAuth().fromuser( prc.oUser ),
-				"user"  : prc.oUser.getMemento()
-			} )
+			.setData( response )
 			.addMessage(
 				"User registered correctly and Bearer token created and it expires in #jwtAuth().getSettings().jwt.expiration# minutes"
 			);
+		// event
+		// 	.getResponse()
+		// 	.setData( {
+		// 		"token" : jwtAuth().fromuser( prc.oUser ),
+		// 		"user"  : prc.oUser
+		// 	} )
+		// 	.addMessage(
+		// 		"User registered correctly and Bearer token created and it expires in #jwtAuth().getSettings().jwt.expiration# minutes"
+		// 	);
 	}
 
 	//verify jwt auth

@@ -29,7 +29,7 @@ component accessors="true" singleton {
 				"id"          : 1,
 				"firstName"   : "admin",
 				"lastName"    : "admin",
-				"username"    : "admin",
+				"email"    : "admin",
 				"password"    : "admin",
 				"roles"       : [],
 				"permissions" : []
@@ -49,20 +49,39 @@ component accessors="true" singleton {
 	}
 
 	function create(required formData){
+		// writeDump(arguments);abort;
+		try {
+			queryExecute("INSERT INTO user(firstName,lastName,email,password)
+				VALUES (?, ?, ?, ?)",
+				[
+					arguments.formData.firstName,
+					arguments.formData.lastName,
+					arguments.formData.username,
+					bcrypt.hashPassword(arguments.formData.password)
+	
+				],{result="res"}
+			);
+	        return res.GENERATEDKEY;
+			
+		} catch (any e) {
+			writeDump(e);abort;
+		}
+	    // var qparams = {};
+		// var genPassword = bcrypt.hashPassword( arguments.formData.password );
+		// qparams['firstName'] = {cfsqltype = "cf_sql_varchar", value = arguments.formData.firstName}; // permission name
+		// qparams['lastName'] = {cfsqltype = "cf_sql_varchar", value = arguments.formData.lastName}; // permission name
+		// qparams['username'] = {cfsqltype = "cf_sql_varchar", value = arguments.formData.username}; // permission name
+		// qparams['password'] = {cfsqltype = "cf_sql_varchar", value = genPassword}; // permission name
+		// try{
+		// 	var sql = "INSERT INTO user SET firstName=:firstName,lastName=:lastName,email=:username,password=:password";
+		// 	var results = queryExecute(sql, qparams);
+		// 	return results;
 
-		queryExecute("INSERT INTO user (firstName,lasttName,email,password)
-			VALUES (?, ?, ?, ?)",
-			[
-				arguments.formData.firstName,
-				arguments.formData.lasttName,
-				arguments.formData.email,
-				bcrypt.hashPassword(arguments.formData.password)
-			],
-			{
-				result: 'local.result'
-			}
-		);
-		return local.result.generatedkey;
+		// }catch (any e) {
+		// 	// writeDump(e);
+		// }
+		// writeDump(result);abort;
+		// return result.generatedkey;
 	}
 	/**
 	 * Retrieve a user by unique identifier

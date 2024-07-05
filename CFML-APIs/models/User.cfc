@@ -30,7 +30,7 @@ component
 	 * Constructor
 	 */
 	function init(){
-		super.init();
+		// super.init();
         variables.Id = "";
         variables.email = "";
         variables.Password  = "";

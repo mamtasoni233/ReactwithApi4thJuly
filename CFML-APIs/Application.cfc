@@ -20,6 +20,7 @@ component {
 	this.secureJSON           = false;
 	this.timezone             = "UTC";
 	this.whiteSpaceManagement = "smart";
+		this.datasource = "real_estate_db2";
 
 	/**
 	 * --------------------------------------------------------------------------
@@ -66,7 +67,7 @@ component {
 	 * ORM + Datasource Settings
 	 * --------------------------------------------------------------------------
 	 */
-	this.datasource = "real_estate_db2";
+
 
 	/**
 	 * Fires when the application starts

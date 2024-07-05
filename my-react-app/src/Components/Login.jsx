@@ -29,7 +29,7 @@ export default function Login() {
                     localStorage.setItem('token', r.data.data.api_token);
                     localStorage.setItem('user', JSON.stringify(r.data.data.oUser));
                     // toast.success('Welcome ' + r.data.data.oUser.name + ' ' + r.data.data.oUser.surname);
-                    if (email !== r.data.data.oUser.email) {
+                    if (r.data.data.oUser.email !== email) {
                         toast.error('Invalid credentials');
                     } else {
                         toast.success('Welcome ' + r.data.data.oUser.name + ' ' + r.data.data.oUser.surname);
@@ -38,11 +38,13 @@ export default function Login() {
 
                 })
                 .catch((e) => {
-                    console.log(e)
+                    console.log("e", e);
+                    //  JSONArray jsonArray = (JSONArray) jsonObject.get("contact");
+                    console.log("error message", e.response.data);
+                    toast.error((e.response.data.messages[0]));
                 });
         } catch (error) {
             console.error('Error logging in:', error);
-            toast.error('An error occurred');
         }
     };
     return (
@@ -75,9 +77,11 @@ export default function Login() {
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
                                 />
-                                <Link className="text-gray-600 hover:text-gray-800">Forgot your password?</Link>
+                                <div className='flex justify-end'>
+                                    <Link className="text-blue-400 hover:text-blue-700">Forgot your password?</Link>
+                                </div>
                             </div>
-                            <div className="mb-6">
+                            <div className="mb-6 text-center">
                                 <button
                                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                     type="submit">
@@ -85,7 +89,7 @@ export default function Login() {
                                 </button>
                             </div>
                             <div className="mt-4 flex items-center w-full text-center">
-                                <p className="text-xs text-gray-500 capitalize text-center w-full" >
+                                <p className="text-s text-gray-500 capitalize text-center w-full" >
                                     Don&apos;t have any account yet?
                                     <Link to="/register"> <span className="text-blue-700"> Sign Up</span></Link>
                                 </p>
