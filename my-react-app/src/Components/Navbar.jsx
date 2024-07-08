@@ -11,7 +11,7 @@ const Navbar = () => {
         }
     });
     const logoutAction = () => {
-        console.log('logout api');
+        // console.log('logout api');
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         navigate("/");

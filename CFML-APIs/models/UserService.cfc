@@ -51,17 +51,25 @@ component accessors="true" singleton {
 	function create(required formData){
 		// writeDump(arguments);abort;
 		try {
-			queryExecute("INSERT INTO user(firstName,lastName,email,password)
-				VALUES (?, ?, ?, ?)",
-				[
-					arguments.formData.firstName,
-					arguments.formData.lastName,
-					arguments.formData.username,
-					bcrypt.hashPassword(arguments.formData.password)
-	
-				],{result="res"}
-			);
-	        return res.GENERATEDKEY;
+			var q = new query();
+			var sql = "SELECT email, id from user where email='#arguments.formData.username#'";
+			q.setSQL(sql);
+			var checkEmail = q.execute().getResult();
+			if (checkEmail.recordcount EQ 0) {
+				queryExecute("INSERT INTO user(firstName,lastName,email,password)
+					VALUES (?, ?, ?, ?)",
+					[
+						arguments.formData.firstName,
+						arguments.formData.lastName,
+						arguments.formData.username,
+						bcrypt.hashPassword(arguments.formData.password)
+		
+					],{result="res"}
+				);
+				return res.GENERATEDKEY;
+			} else {
+				return false;
+			}
 			
 		} catch (any e) {
 			writeDump(e);abort;
