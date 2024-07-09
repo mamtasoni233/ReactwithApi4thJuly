@@ -1,8 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer components {
-  /* .btn-primary {
-      @apply py-1.5 px-3 text-center bg-blue-700 rounded-md text-white;
-  } */
+  .span-style {
+    @apply absolute top-0 left-0 w-full h-full origin-center [transform-style:preserve-3d] lg:[transform:rotateY(calc(var(--i)*45deg))_translateZ(350px)] md:[transform:rotateY(calc(var(--i)*45deg))_translateZ(265px)] sm:[transform:rotateY(calc(var(--i)*45deg))_translateZ(216px)] [transform:rotateY(calc(var(--i)*45deg))_translateZ(120px)];
+  }
+  .img-style {
+    @apply absolute top-0 left-0 w-full h-full rounded-sm object-cover [transition:2s] sm:hover:-translate-y-[50px] hover:-translate-y-[20px] hover:scale-[1.3];
+  }
 }

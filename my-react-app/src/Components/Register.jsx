@@ -3,13 +3,17 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import PasswordChecklist from "react-password-checklist"
 
 export default function Register() {
     // const API_BASE_URL = 'http://192.168.3.190:59236/';
     const navigate = useNavigate();
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [isConfrimPasswordVisible, setIsConfrimPasswordVisible] = useState(false);
+    // const [isSubmit, setIsSubmit] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -24,9 +28,6 @@ export default function Register() {
         firstName: '',
         lastName: '',
     });
-    const [isSubmit, setIsSubmit] = useState(false);
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    const [isConfrimPasswordVisible, setIsConfrimPasswordVisible] = useState(false);
     function togglePasswordVisibility() {
         setIsPasswordVisible((prevState) => !prevState);
     }
@@ -34,25 +35,29 @@ export default function Register() {
         setIsConfrimPasswordVisible((prevState) => !prevState);
     }
     const onInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value.trim(),
-        });
-        setFormError(validationsErrors(formData));
+        // const { name, value } = e.target;
+        /*  setFormData({
+             ...formData,
+             [name]: value.trim(),
+         }); */
+        let oldData = { ...formData };
+        let inputName = e.target.name;
+        let inputValue = e.target.value.trim();
+        oldData[inputName] = inputValue;
+        setFormData(oldData);
+        setFormError(validationsErrors(oldData));
     };
-    useEffect(() => {
-        // console.log(formError);
-        if (Object.keys(formError).length === 0 && isSubmit) {
-            // console.log(formData);
-            setIsSubmit(true);
-        }
-    }, [isSubmit, formError, navigate]);
+    // useEffect(() => {
+    //     // console.log(formError);
+    //     if (Object.keys(formError).length === 0 && isSubmit) {
+    //         // console.log(formData);
+    //         // setIsSubmit(true);
+    //     }
+    // }, [formError, isSubmit]);
 
     const validationsErrors = (values) => {
         const errors = {};
         const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
-
         if (!values.firstName) {
             errors.firstName = 'First name is required.';
         }
@@ -62,18 +67,15 @@ export default function Register() {
         if (!values.email) {
             errors.email = 'Email is required.';
         } else if (!regex.test(values.email)) {
-            errors.email = 'Email not matched.';
+            errors.email = 'Please enter valid Email address.';
         }
-        // console.log(values.password.length);
         if (!values.password) {
             errors.password = 'Password is required.';
-        } else if (values.password.length < 7) {
-            errors.password = 'Password is more than and eqal to 8 characters.';
         }
         if (!values.confirmPassword) {
             errors.confirmPassword = 'Confirm Password is required';
-        } else if (values.password !== values.confirmPassword) {
-            errors.confirmPassword = 'Password and Confirm Password does not match.';
+        } else if (values.confirmPassword !== values.password) {
+            errors.confirmPassword = 'Password does not match.';
         }
         return errors;
     };
@@ -81,8 +83,7 @@ export default function Register() {
         e.preventDefault();
         let err = validationsErrors(formData);
         setFormError(err);
-        console.log(err)
-        setIsSubmit(true);
+        // setIsSubmit(true);
         let payload = {
             username: formData.email,
             password: formData.password,
@@ -118,9 +119,9 @@ export default function Register() {
             >
                 <div className="h-screen flex justify-center items-center">
                     <div className="bg-white mx-4 p-8 rounded shadow-md w-full md:w-1/2 lg:w-1/3">
-                        <h1 className="text-3xl font-bold mb-8 text-center">Login</h1>
+                        <h1 className="text-3xl font-bold mb-8 text-center">Register Form</h1>
                         <form onSubmit={handleRegister}>
-                            <div className="mb-4 h-min-20 sm:h-100%">
+                            <div className="min-h-24 sm:h-100%">
                                 <label
                                     className="block font-semibold text-gray-700 mb-2"
                                     htmlFor="email"
@@ -139,7 +140,7 @@ export default function Register() {
                                 />
                                 <p className="text-red-600 ">{formError.firstName}</p>
                             </div>
-                            <div className="mb-4 h-min-20 sm:h-100%">
+                            <div className=" min-h-24 sm:h-100%">
                                 <label
                                     className="block font-semibold text-gray-700 mb-2"
                                     htmlFor="email"
@@ -158,7 +159,7 @@ export default function Register() {
                                 />
                                 <p className="text-red-600 ">{formError.lastName}</p>
                             </div>
-                            <div className="mb-4 h-min-20 sm:h-100%">
+                            <div className=" min-h-24 sm:h-100%">
                                 <label
                                     className="block font-semibold text-gray-700 mb-2"
                                     htmlFor="email"
@@ -177,7 +178,7 @@ export default function Register() {
                                 />
                                 <p className="text-red-600 ">{formError.email}</p>
                             </div>
-                            <div className="mb-4 h-min-20 relative sm:h-100%">
+                            <div className="min-h-24 relative sm:h-100%">
                                 <label
                                     className="block font-semibold text-gray-700 mb-2"
                                     htmlFor="password"
@@ -185,7 +186,7 @@ export default function Register() {
                                     Password
                                 </label>
                                 <input
-                                    className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    className="relative border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="password"
                                     name="password"
                                     type={isPasswordVisible ? "text" : "password"}
@@ -195,7 +196,7 @@ export default function Register() {
                                     onBlur={validationsErrors}
                                 />
                                 <span
-                                    className="absolute top-[50%] right-3 text-black-600"
+                                    className="absolute top-[6vh] right-3 text-black-600"
                                     onClick={togglePasswordVisibility}
                                 >
                                     {isPasswordVisible ? (
@@ -204,9 +205,24 @@ export default function Register() {
                                         <FontAwesomeIcon icon={faEyeSlash} />
                                     )}
                                 </span>
-                                <p className="text-red-600 ">{formError.password}</p>
+                                {formError.password ?
+                                    <p className="text-red-600 ">{formError.password}</p> : ''
+                                }
+                                {formData.password !== '' ? <PasswordChecklist
+                                    rules={["minLength", "specialChar", "number", "capital"]}
+                                    minLength={8}
+                                    value={formData.password}
+                                    messages={{
+                                        minLength: "Password has more than and equal to 8 characters.",
+                                        specialChar: "Password ha special characters.",
+                                        number: "Password has a number.",
+                                        capital: "Password has a capital letter."
+                                    }}
+                                /> : ''}
+
+
                             </div>
-                            <div className="mb-4 relative h-min-20 sm:h-100%">
+                            <div className="relative min-h-28 sm:h-100%">
                                 <label
                                     className="block font-semibold text-gray-700 mb-2"
                                     htmlFor="password"
@@ -224,7 +240,7 @@ export default function Register() {
                                     onBlur={validationsErrors}
                                 />
                                 <span
-                                    className="absolute top-[40%] right-3 text-black-600"
+                                    className="absolute top-[34%] right-3 text-black-600"
                                     onClick={toggleConfrimPasswordVisibility}
                                 >
                                     {isConfrimPasswordVisible ? (

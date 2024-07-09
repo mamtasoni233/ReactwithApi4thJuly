@@ -18,14 +18,19 @@ export default function Login() {
     email: '',
     password: ''
   });
-  const [isSubmit, setIsSubmit] = useState(false);
   const onInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-    validationsErrors(e);
+    // const { name, value } = e.target;
+    // setFormData({
+    //   ...formData,
+    //   [name]: value,
+    // });
+    // validationsErrors(e);
+    let oldData = { ...formData };
+    let inputName = e.target.name;
+    let inputValue = e.target.value.trim();
+    oldData[inputName] = inputValue;
+    setFormData(oldData);
+    setFormError(validationsErrors(oldData));
   };
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   function togglePasswordVisibility() {
@@ -47,33 +52,30 @@ export default function Login() {
   };
 
   useEffect(() => {
-    if (Object.keys(formError).length === 0 && isSubmit) {
-      // console.log(formData);
-      setIsSubmit(true);
-    }
     if (
       localStorage.getItem('token') !== '' &&
       localStorage.getItem('token') != null
     ) {
       navigate('/dashboard');
     }
-  }, [isSubmit, formError, navigate]);
+  });
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("r.data.data");
+    // console.log("r.data.data");
 
-    setFormError(validationsErrors(formData));
+    // setFormError(validationsErrors(formData));
+    let err = validationsErrors(formData);
+    setFormError(err);
     let payload = {
       email: formData.email,
       password: formData.password,
     };
-    console.log(formError)
-    if (Object.keys(formError).length === 0) {
+    if (Object.keys(err).length === 0) {
       try {
         await axios
           .post('http://192.168.3.190:59236/Auth/login', payload)
           .then((r) => {
-            console.log(r.data.data);
+            // console.log(r.data.data);
             localStorage.setItem('token', r.data.data.api_token);
             localStorage.setItem('user', JSON.stringify(r.data.data.oUser));
             if (r.data.data.oUser.email !== formData.email) {
@@ -105,9 +107,9 @@ export default function Login() {
       >
         <div className="h-screen flex justify-center items-center">
           <div className="bg-white mx-4 p-8 rounded shadow-md w-full md:w-1/2 lg:w-1/3">
-            <h1 className="text-3xl font-bold mb-8 text-center">Login</h1>
+            <h1 className="text-3xl font-bold mb-8 text-center">Login Form</h1>
             <form onSubmit={handleSubmit}>
-              <div className="mb-4 h-min-20 sm:h-100%">
+              <div className="mb-4 min-h-20 sm:h-100%">
                 <label
                   className="block font-semibold text-gray-700 mb-2"
                   htmlFor="email"
@@ -126,7 +128,7 @@ export default function Login() {
                 />
                 <p className="text-red-600">{formError.email}</p>
               </div>
-              <div className="mb-4 h-min-20 relative sm:h-100%">
+              <div className="mb-4 min-h-20 relative sm:h-100%">
                 <label
                   className="block font-semibold text-gray-700 mb-2"
                   htmlFor="password"

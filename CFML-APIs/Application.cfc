@@ -20,7 +20,7 @@ component {
 	this.secureJSON           = false;
 	this.timezone             = "UTC";
 	this.whiteSpaceManagement = "smart";
-		this.datasource = "real_estate_db2";
+	this.datasource = "real_estate_db2";
 
 	/**
 	 * --------------------------------------------------------------------------
