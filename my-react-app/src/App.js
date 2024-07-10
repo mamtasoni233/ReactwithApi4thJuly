@@ -1,4 +1,4 @@
-
+import React, { createContext } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from './Components/Footer';
 import Navbar from './Components/Navbar';
@@ -13,6 +13,8 @@ import Service from './Pages/Service';
 import Visit from './Pages/Visit';
 import Gallery from './Pages/Gallery';
 import { ToastContainer } from 'react-toastify';
+
+export const LoginContext = createContext();
 // A wrapper component to include Navbar and Footer for every route
 const MainLayout = () => (
   <>
@@ -28,34 +30,37 @@ const AuthLayout = () => {
     </>
   );
 };
+const hello = 'My name is Mamta';
 
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <ToastContainer />
-        <Routes>
-          {/* Auth Layout Routes */}
-          <Route element={<AuthLayout />}>
-            <Route path="/" element={<Login />} />
-            <Route
-              path="/register"
-              element={<Register />}
-              activeclassname="active"
-            />
-            <Route path="*" element={<Error404 />} />
-          </Route>
+      <LoginContext.Provider value={{ hello }}>
+        <BrowserRouter>
+          <ToastContainer />
+          <Routes>
+            {/* Auth Layout Routes */}
+            <Route element={<AuthLayout />}>
+              <Route path="/" element={<Login />} />
+              <Route
+                path="/register"
+                element={<Register />}
+                activeclassname="active"
+              />
+              <Route path="*" element={<Error404 />} />
+            </Route>
 
-          {/* Main Layout Routes */}
-          <Route element={<MainLayout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/service" element={<Service />} />
-            <Route path="/visit-us" element={<Visit />} />
-            <Route path="/gallery" element={<Gallery />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+            {/* Main Layout Routes */}
+            <Route element={<MainLayout />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/service" element={<Service />} />
+              <Route path="/visit-us" element={<Visit />} />
+              <Route path="/gallery" element={<Gallery />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </LoginContext.Provider>
     </>
   );
 }

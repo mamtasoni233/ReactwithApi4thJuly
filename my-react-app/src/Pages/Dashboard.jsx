@@ -1,6 +1,8 @@
 import React from 'react'
 
 export default function Dashboard() {
+    // const user = localStorage.getItem('user');
+    // console.log(user);
     return (
         <>
             {/* <!-- hero seciton-- > */}
